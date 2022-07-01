@@ -5,6 +5,9 @@
 *.tfstate
 *.tfstate.*
 
+# SSH keys
+keys/*
+
 # Crash log files
 crash.log
 

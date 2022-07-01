@@ -1,0 +1,6 @@
+[web]
+%{ for index, web in web-vm-ip  ~}
+${web}
+%{ endfor ~}
+[loadbalancer]
+${lb-vm-ip}

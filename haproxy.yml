@@ -1,0 +1,16 @@
+- name: Configure haproxy
+  hosts: loadbalancer
+  become: True
+  tasks:
+    - name: "Installing haproxy"
+      apt: name=haproxy update_cache=yes
+
+    - name: "Copying configuration file"
+      template:
+        src: "configs/haproxy.cfg"
+        dest: "/etc/haproxy/haproxy.cfg"
+
+    - name: "restart haproxy services"
+      service:
+        name: "haproxy"
+        state: restarted
