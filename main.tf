@@ -1,5 +1,5 @@
 resource "digitalocean_droplet" "web" {
-  count  = 2
+  count  = var.amount_web_servers
   image  = "ubuntu-18-04-x64"
   name   = "web-${count.index}"
   region = "fra1"

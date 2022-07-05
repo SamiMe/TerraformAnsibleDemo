@@ -1,5 +1,9 @@
 variable "do_token" {}
 
+variable "amount_web_servers" {
+  description = "Amout of nginx servers"
+}
+
 variable "pvt_key" {
   type        = string
   default     = "./keys/digitalocean"
