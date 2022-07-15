@@ -1,3 +1,4 @@
+# Create web server droplets
 resource "digitalocean_droplet" "web" {
   count  = var.amount_web_servers
   image  = "ubuntu-18-04-x64"
@@ -8,24 +9,9 @@ resource "digitalocean_droplet" "web" {
   ssh_keys = [
     data.digitalocean_ssh_key.terraform.id
   ]
-
-  provisioner "remote-exec" {
-    connection {
-      host        = self.ipv4_address
-      type        = "ssh"
-      user        = "root"
-      private_key = file(var.pvt_key)
-    }
-
-    inline = ["sudo apt update"]
-  }
-
-  provisioner "local-exec" {
-    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i '${self.ipv4_address},' --private-key ${var.pvt_key} -e 'pub_key=${var.pub_key}' nginx.yml"
-  }
-
 }
 
+# Create loadbalanser droplet
 resource "digitalocean_droplet" "loadbalancer" {
   image  = "ubuntu-18-04-x64"
   name   = "Loadbalancer"
@@ -37,6 +23,17 @@ resource "digitalocean_droplet" "loadbalancer" {
   ]
 }
 
+# Install nginx on the web servers
+resource "null_resource" "nginx" {
+  provisioner "local-exec" {
+    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i ${var.inventory} --private-key ${var.pvt_key} -e 'pub_key=${var.pub_key}' nginx.yml"
+  }
+  depends_on = [
+    local_file.AnsibleInventory
+  ]
+}
+
+# Install haproxy on the loadbalancer
 resource "null_resource" "haproxy" {
   provisioner "local-exec" {
     command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i ${var.inventory} --private-key ${var.pvt_key} -e 'pub_key=${var.pub_key}' haproxy.yml"

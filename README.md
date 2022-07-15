@@ -21,7 +21,7 @@ NGINX is used for web servers and HAProxy for load balancer.
 
 ## Usage
 - Clone repository 
-- Add SSH keys in keys-folder
+- Add SSH keys in keys-folder and add ssh-key name from digitalocean to provider.tf SSH key name.
 
 Init terraform:
 ```bash

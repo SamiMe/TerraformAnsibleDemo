@@ -1,5 +1,5 @@
-- name: Configure webserver with nginx
-  hosts: all
+- name: Configure nginx
+  hosts: web
   become: True
   tasks:
     - name: install python3
@@ -7,9 +7,11 @@
 
     - name: install nginx
       apt: name=nginx update_cache=yes
-
-    - name: copy nginx config file
-      copy: src=configs/nginx.conf dest=/etc/nginx/sites-available/default
+    
+    - name: "Copying nginx configuration file"
+      template:
+        src: "configs/nginx.cfg"
+        dest: "/etc/nginx/sites-available/default"
 
     - name: enable configuration
       file: >

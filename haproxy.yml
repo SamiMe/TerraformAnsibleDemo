@@ -1,4 +1,4 @@
-- name: Configure haproxy
+- name: Configure loadbalancer
   hosts: loadbalancer
   become: True
   tasks:

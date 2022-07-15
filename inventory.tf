@@ -5,7 +5,6 @@ resource "local_file" "AnsibleInventory" {
       web-vm-ip = [for u in digitalocean_droplet.web : u.ipv4_address],
       lb-vm-ip  = "${digitalocean_droplet.loadbalancer.ipv4_address}"
     }
-
   )
   filename = "./inventory/hosts"
 
@@ -13,5 +12,3 @@ resource "local_file" "AnsibleInventory" {
     digitalocean_droplet.loadbalancer
   ]
 }
-
-
